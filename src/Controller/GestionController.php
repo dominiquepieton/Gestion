@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Gestion;
 use App\Form\GestionType;
+use App\Repository\GestionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,9 +15,10 @@ class GestionController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function index(): Response
+    public function index(GestionRepository $gestionRepository): Response
     {
-        return $this->render('gestion/index.html.twig');
+        $gestions = $gestionRepository->findAll();
+        return $this->render('gestion/index.html.twig', ['gestions' => $gestions]);
     }
 
 

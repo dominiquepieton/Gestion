@@ -5,8 +5,80 @@
 {% block body %}
 <div class="container-fluid">
     <h1 class="text-center">Gestion des candidatures :</h1>
-    <hr class="w-50 bg-danger mx-auto">
+    <hr class="w-50 bg-danger mx-auto mb-3">
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show w-25 mx-auto" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
 
-
+    <table class="table table-striped table-light">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Poste</th>
+                <th>Entreprise</th>
+                <th>Adresse</th>
+                <th>Annonce</th>
+                <th>Salaire</th>
+                <th>Postulé le :</th>
+                <th>Premier rdv</th>
+                <th>Second rdv</th>
+                <th>Candidature vu</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gestion in gestions %}
+            <tr>
+                <td>{{gestion.id}}</td>
+                <td>{{gestion.poste}}</td>
+                <td><strong>{{gestion.entreprise}}</strong></td>
+                <td>
+                    <p>{{gestion.adresse}}</p>
+                    <p>{{gestion.code}}  {{gestion.ville}}</p>
+                </td>
+                <td>{{gestion.contenu |striptags|slice(0, 100)}}</td>
+                <td>{{gestion.salaire}}</td>
+                <td>{{gestion.createdat | date('d-m-Y')}}</td>
+                {% if gestion.premier == false %}
+                    <td>0</td>
+                {% else %}
+                    <td>1</td>
+                {% endif %}
+                {% if gestion.second == false %}
+                    <td>0</td>
+                {% else %}
+                    <td>1</td>
+                {% endif %}
+                {% if gestion.troisieme == false %}
+                    <td>0</td>
+                {% else %}
+                    <td>1</td>
+                {% endif %}  
+                <td>
+                    <a href="#" class="btn btn-primary">Valider</a>
+                    <a href="#" class="text-secondary p-2" data-toggle="tooltip4" title="Editer"><i class="far fa-edit fa-lg"></i></a>
+                    <a onclick="javascript:
+                                    swal({
+                                        title: 'supprimer ?',
+                                        text: 'Voulez-vous supprimer cette candidature : {{gestion.entreprise}} ?',
+                                        type: 'question',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Oui',
+                                        confirmButtonColor: '#0275d8',
+                                        cancelButtonText: 'Non',
+                                        cancelButtonColor: '#d9534f',
+                                    })
+                                .then((willDelete) => {
+                                    window.location.href = '#';});" class="text-danger">
+												<i class="fas fa-trash-alt fa-lg" data-toggle="tooltip4" title="Supprimer"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}    
+        </tbody>
+    </table>
 </div>
 {% endblock %}
